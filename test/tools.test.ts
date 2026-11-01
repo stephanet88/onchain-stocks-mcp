@@ -149,3 +149,30 @@ test("issuer from the last dash segment, so company names with dashes survive", 
   assert.equal(issuerName({ ...base, label: "KO", name: "Coca - Cola - Ondo" }, "KO"), "Ondo");
   assert.equal(issuerName({ ...base, label: "KO", name: "Coca-Cola" }, "KO"), "unknown");
 });
+
+test("the tool call deadline returns what arrived in time and labels the rest", async () => {
+  // XS answers at once; the others hang until the deadline aborts them, like a rate-limited API retrying
+  const hanging = sources({
+    quote: (mint, usd, signal) => {
+      if (mint === "XS") return sources().quote(mint, usd);
+      return new Promise((_resolve, reject) => {
+        // like fetch: a request started after the deadline fails at once
+        if (signal?.aborted) return reject(signal.reason);
+        const pending = setTimeout(() => undefined, 60_000);
+        signal?.addEventListener("abort", () => {
+          clearTimeout(pending);
+          reject(signal.reason);
+        });
+      });
+    },
+  });
+  const started = Date.now();
+  const res = await call<{ ranked: { issuer: string }[]; failed: { issuer: string; error: string }[] }>(
+    new Session(hanging, CATALOG, 100),
+    "compare_issuers",
+    { symbol: "TSLA" },
+  );
+  assert.ok(Date.now() - started < 1_000, "returned at the deadline, not after the hung requests");
+  assert.deepEqual(res.ranked.map((r) => r.issuer), ["Backed (xStock)"]);
+  assert.deepEqual(res.failed.map((f) => f.error), ["tool time limit reached", "tool time limit reached"]);
+});

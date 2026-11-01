@@ -1,6 +1,6 @@
 {
   "name": "onchain-stocks-mcp",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "MCP server: what a tokenized stock on Solana really costs against the real share",
   "license": "MIT",
   "type": "module",

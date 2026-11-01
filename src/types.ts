@@ -5,10 +5,10 @@ import type { RiskSummary, StockAsset, Variant } from "./tokens.ts";
 
 // search and risk need a tokens.xyz key; without them only the keyless tools run
 export interface Sources {
-  quote: (mint: string, usd: number) => Promise<Quote>;
+  quote: (mint: string, usd: number, signal?: AbortSignal) => Promise<Quote>;
   now: () => number;
-  search?: (query: string) => Promise<StockAsset[]>;
-  risk?: (mint: string) => Promise<RiskSummary>;
+  search?: (query: string, signal?: AbortSignal) => Promise<StockAsset[]>;
+  risk?: (mint: string, signal?: AbortSignal) => Promise<RiskSummary>;
 }
 
 export interface CatalogToken {
@@ -38,7 +38,8 @@ export interface ToolDef {
   description: string;
   keyed: boolean;
   input: z.ZodRawShape;
-  run: (session: Session, args: Record<string, unknown>) => Promise<unknown>;
+  // signal fires at the tool call's deadline; pass it to every request
+  run: (session: Session, args: Record<string, unknown>, signal: AbortSignal) => Promise<unknown>;
 }
 
 export function defineTool<S extends z.ZodRawShape>(def: {
@@ -46,7 +47,7 @@ export function defineTool<S extends z.ZodRawShape>(def: {
   description: string;
   keyed: boolean;
   input: S;
-  run: (session: Session, args: z.infer<z.ZodObject<S>>) => Promise<unknown>;
+  run: (session: Session, args: z.infer<z.ZodObject<S>>, signal: AbortSignal) => Promise<unknown>;
 }): ToolDef {
   return def as unknown as ToolDef;
 }

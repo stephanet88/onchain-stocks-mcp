@@ -1,11 +1,14 @@
 import { z } from "zod";
 import { CATALOG } from "./catalog.ts";
-import { describeError } from "./http.ts";
+import { DeadlineError, describeError } from "./http.ts";
 import { KEYED_TOOLS } from "./keyed.ts";
 import { KEYLESS_TOOLS } from "./keyless.ts";
 import type { Catalog, Known, Sources, ToolDef } from "./types.ts";
 
 export const ALL_TOOLS: ToolDef[] = [...KEYLESS_TOOLS, ...KEYED_TOOLS];
+
+// one budget per tool call: retries on a rate-limited API must not keep the client waiting for minutes
+export const TOOL_DEADLINE_MS = 30_000;
 
 // one per client connection, so the mints a search returned stay scoped to that client
 export class Session {
@@ -13,9 +16,12 @@ export class Session {
   readonly sources: Sources;
   readonly catalog: Catalog;
 
-  constructor(sources: Sources, catalog: Catalog = CATALOG) {
+  readonly deadlineMs: number;
+
+  constructor(sources: Sources, catalog: Catalog = CATALOG, deadlineMs = TOOL_DEADLINE_MS) {
     this.sources = sources;
     this.catalog = catalog;
+    this.deadlineMs = deadlineMs;
   }
 
   get hasKey(): boolean {
@@ -40,10 +46,14 @@ export class Session {
     }
     const parsed = z.object(tool.input).safeParse(args ?? {});
     if (!parsed.success) return { error: `bad arguments: ${parsed.error.issues.map((i) => `${i.path.join(".") || "input"} ${i.message}`).join("; ")}` };
+    const deadline = new AbortController();
+    const timer = setTimeout(() => deadline.abort(new DeadlineError()), this.deadlineMs);
     try {
-      return await tool.run(this, parsed.data);
+      return await tool.run(this, parsed.data, deadline.signal);
     } catch (err) {
       return { error: `source ${describeError(err)}` };
+    } finally {
+      clearTimeout(timer);
     }
   }
 }

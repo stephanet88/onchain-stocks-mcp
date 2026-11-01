@@ -40,16 +40,16 @@ interface CuratedResponse {
 // curated list "stocks" is sorted by 24h volume, so the first rows are the most traded
 export async function topStocks(apiKey: string, limit: number, fetchImpl?: Fetch): Promise<StockAsset[]> {
   const url = `${BASE}/assets/curated?list=stocks&variants=all&limit=${limit}`;
-  const body = await getJson<CuratedResponse>(url, { "x-api-key": apiKey }, fetchImpl);
+  const body = await getJson<CuratedResponse>(url, { headers: { "x-api-key": apiKey }, fetchImpl });
   return body.assets;
 }
 
-export async function searchStocks(apiKey: string, query: string, fetchImpl?: Fetch): Promise<StockAsset[]> {
+export async function searchStocks(apiKey: string, query: string, signal?: AbortSignal, fetchImpl?: Fetch): Promise<StockAsset[]> {
   const url = `${BASE}/assets/search?q=${encodeURIComponent(query)}&category=equity&variants=all&limit=5`;
-  const body = await getJson<{ results: StockAsset[] }>(url, { "x-api-key": apiKey }, fetchImpl);
+  const body = await getJson<{ results: StockAsset[] }>(url, { headers: { "x-api-key": apiKey }, fetchImpl, signal });
   return body.results;
 }
 
-export async function riskSummary(apiKey: string, mint: string, fetchImpl?: Fetch): Promise<RiskSummary> {
-  return getJson<RiskSummary>(`${BASE}/assets/risk-summary?mint=${mint}`, { "x-api-key": apiKey }, fetchImpl);
+export async function riskSummary(apiKey: string, mint: string, signal?: AbortSignal, fetchImpl?: Fetch): Promise<RiskSummary> {
+  return getJson<RiskSummary>(`${BASE}/assets/risk-summary?mint=${mint}`, { headers: { "x-api-key": apiKey }, fetchImpl, signal });
 }

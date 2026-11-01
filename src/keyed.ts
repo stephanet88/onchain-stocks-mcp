@@ -12,8 +12,8 @@ const searchStocks = defineTool({
     "Find tokenized versions of a stock on Solana. Returns the real share price and its age, and every token with issuer, redeemability, liquidity tier, listed price and mint.",
   keyed: true,
   input: { query: z.string().trim().min(1).describe("Company name or ticker, e.g. Tesla or NVDA") },
-  run: async (session, { query }) => {
-    const assets = await session.keyedSources().search(query);
+  run: async (session, { query }, signal) => {
+    const assets = await session.keyedSources().search(query, signal);
     return {
       source: "tokens.xyz",
       results: assets.map((asset) => {
@@ -47,12 +47,12 @@ const quoteBuy = defineTool({
     "Quote buying a token with USDC through Jupiter. Returns the price paid per token and the all-in cost against the real share price. The mint must come from search_stocks.",
   keyed: true,
   input: { mint: z.string(), usd: z.number().min(1).max(MAX_BUY_USD).describe(`Amount of USDC, 1 to ${MAX_BUY_USD}`) },
-  run: async (session, { mint, usd }) => {
+  run: async (session, { mint, usd }, signal) => {
     const known = session.known.get(mint);
     if (!known) return UNKNOWN_MINT;
     const decimals = known.variant.market?.decimals;
     if (decimals == null) return { error: "token decimals unknown, cannot price the quote" };
-    const q = await session.sources.quote(mint, usd);
+    const q = await session.sources.quote(mint, usd, signal);
     const paid = effectivePrice(usd, q.outAmount, decimals);
     const listedVsQuotedPct = gapPct(paid, known.variant.market?.price);
     return {
@@ -74,9 +74,9 @@ const riskScore = defineTool({
   description: "Market risk score (0 to 100, grade A/B/C) for a token, from liquidity, holder spread and trading activity. The mint must come from search_stocks.",
   keyed: true,
   input: { mint: z.string() },
-  run: async (session, { mint }) => {
+  run: async (session, { mint }, signal) => {
     if (!session.known.has(mint)) return UNKNOWN_MINT;
-    const r = await session.keyedSources().risk(mint);
+    const r = await session.keyedSources().risk(mint, signal);
     return { source: "tokens.xyz risk summary", score: r.score, grade: r.grade, label: r.label, caps: r.caps, insufficientData: r.hasInsufficientData };
   },
 });

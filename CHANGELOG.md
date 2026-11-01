@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Each tool call has a 30 s deadline: in-flight requests and retry waits are cancelled, and the tool returns what arrived in time, labelling the rest "tool time limit reached".
+
 ## 0.3.0
 
 - Requests time out after 10 s and come back as a labelled error ("timed out", "rate limited", "no route") instead of hanging.

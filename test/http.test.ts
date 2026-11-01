@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { describeError, getJson, HttpError, type Fetch } from "../src/http.ts";
+import { DeadlineError, describeError, getJson, HttpError, type Fetch } from "../src/http.ts";
 
 function fakeFetch(statuses: number[]): { fetch: Fetch; calls: () => number } {
   let n = 0;
@@ -14,19 +14,19 @@ function fakeFetch(statuses: number[]): { fetch: Fetch; calls: () => number } {
 
 test("retries 429 and 5xx, then succeeds", async () => {
   const f = fakeFetch([429, 503, 200]);
-  assert.deepEqual(await getJson("https://x", {}, f.fetch), { ok: true });
+  assert.deepEqual(await getJson("https://x", { fetchImpl: f.fetch }), { ok: true });
   assert.equal(f.calls(), 3);
 });
 
 test("does not retry a 4xx other than 429", async () => {
   const f = fakeFetch([404]);
-  await assert.rejects(getJson("https://x", {}, f.fetch), (err) => err instanceof HttpError && err.status === 404);
+  await assert.rejects(getJson("https://x", { fetchImpl: f.fetch }), (err) => err instanceof HttpError && err.status === 404);
   assert.equal(f.calls(), 1);
 });
 
 test("gives up after the retry budget", async () => {
   const f = fakeFetch([429]);
-  await assert.rejects(getJson("https://x", {}, f.fetch, 2), HttpError);
+  await assert.rejects(getJson("https://x", { fetchImpl: f.fetch, maxRetries: 2 }), HttpError);
   assert.equal(f.calls(), 3);
 });
 
@@ -43,7 +43,7 @@ test("a request that never answers is aborted at the timeout, not retried", asyn
       });
     });
   }) as Fetch;
-  await assert.rejects(getJson("https://x", {}, hang, 4, 1, 50), (err: Error) => err.name === "TimeoutError");
+  await assert.rejects(getJson("https://x", { fetchImpl: hang, baseDelayMs: 1, timeoutMs: 50 }), (err: Error) => err.name === "TimeoutError");
   assert.equal(calls, 1);
 });
 
@@ -52,4 +52,13 @@ test("errors get one label per cause", () => {
   assert.equal(describeError(new HttpError("u", 429, "")), "rate limited");
   assert.equal(describeError(new HttpError("u", 400, "Could not find any route")), "no route");
   assert.equal(describeError(new HttpError("u", 502, "bad gateway")), "upstream error 502");
+});
+
+test("the caller's deadline cancels a pending backoff wait", async () => {
+  const deadline = new AbortController();
+  const always429 = (async () => new Response("slow down", { status: 429 })) as Fetch;
+  setTimeout(() => deadline.abort(new DeadlineError()), 50);
+  const started = Date.now();
+  await assert.rejects(getJson("https://x", { fetchImpl: always429, baseDelayMs: 10_000, signal: deadline.signal }), DeadlineError);
+  assert.ok(Date.now() - started < 1_000);
 });
