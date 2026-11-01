@@ -26,4 +26,4 @@ jobs:
       - run: npm test
       - name: Tag matches package.json version
         run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
-      - run: npm publish
+      - run: npm publish --loglevel verbose
