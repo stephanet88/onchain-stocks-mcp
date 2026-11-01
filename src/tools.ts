@@ -115,7 +115,7 @@ export const TOOL_SPECS = [
     function: {
       name: "compare_issuers",
       description:
-        "Quote the same USDC buy for every issuer's token of one stock (e.g. xStock vs Ondo) and rank them by price paid per token. No API key needed.",
+        "Quote the same USDC buy for every issuer's token of one stock (e.g. xStock vs Ondo) and rank them by price paid per token. No API key needed; with one, each token is also compared to the real share price.",
       parameters: {
         type: "object",
         properties: { symbol: { type: "string", description: "Ticker, e.g. TSLA" }, usd: { type: "number", description: "Amount of USDC, default 1000" } },
@@ -279,13 +279,28 @@ export class Tools {
     }
     priced.sort((a, b) => a.pricePerToken - b.pricePerToken);
     const cheapest = priced[0]?.pricePerToken;
+    const share = await this.sharePrice(symbol);
     return {
       source: "Jupiter quotes (not fills)",
       quotedAt: new Date(this.sources.now()).toISOString(),
       usd,
+      sharePrice: share?.price ?? null,
+      sharePriceAgeMinutes: share?.ageMinutes ?? null,
       note: "Prices are what a Jupiter route charges now, not the issuer's own mint or redeem price: a large gap usually means a thin route. Tokens of one stock can also differ in what they represent (redeemability, dividends).",
-      ranked: priced.map((r) => ({ ...r, vsCheapestPct: gapPct(r.pricePerToken, cheapest) })),
+      ranked: priced.map((r) => ({ ...r, vsCheapestPct: gapPct(r.pricePerToken, cheapest), vsSharePct: gapPct(r.pricePerToken, share?.price) })),
       failed,
     };
+  }
+
+  // the real share price needs the keyed search; without a key, or if it fails, comparisons stay token to token
+  private async sharePrice(symbol: string): Promise<{ price: number; ageMinutes: number | null } | null> {
+    if (!this.sources.search) return null;
+    try {
+      const assets = await this.sources.search(symbol);
+      const market = assets.find((a) => a.symbol?.toLowerCase() === symbol.trim().toLowerCase())?.canonicalMarket;
+      return market ? { price: market.price, ageMinutes: ageMinutes(market.asOf, this.sources.now()) } : null;
+    } catch {
+      return null;
+    }
   }
 }

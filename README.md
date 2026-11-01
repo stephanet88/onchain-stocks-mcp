@@ -4,7 +4,7 @@ MCP server for tokenized stocks on Solana: which token is cheapest, what size co
 
 Read-only. It never trades, holds keys or gives advice.
 
-![Demo: compare tokenized Tesla issuers and slippage, no API key](demo.gif)
+![Demo: tokenized Tesla from three issuers vs the real share price](demo.gif)
 
 ## Install
 
@@ -38,7 +38,7 @@ Without a key:
 | Tool | Returns |
 |---|---|
 | `list_tokens` | The 129 tokens of 84 stocks covered: issuer, redeemability, mint |
-| `compare_issuers` | The same buy quoted for every issuer's token of one stock (xStock, Ondo, Backpack...), ranked by price per token |
+| `compare_issuers` | The same buy quoted for every issuer's token of one stock (xStock, Ondo, Backpack...), ranked by price per token. With a key, also vs the real share price |
 | `quote_sizes` | One token quoted at up to 5 sizes, and how much more each size pays per token than the smallest (slippage) |
 
 With a [tokens.xyz](https://tokens.xyz) key (`TOKENS_API_KEY`), three more:

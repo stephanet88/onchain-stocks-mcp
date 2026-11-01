@@ -106,3 +106,23 @@ test("issuer from the name when there is no issuer field, ticker labels ignored 
   assert.equal(issuerName({ ...base, issuer: "Backed" }, "TSLA"), "Backed (xStock)");
   assert.equal(issuerName({ ...base, label: "Ondo" }, "TSLA"), "Ondo");
 });
+
+test("compare_issuers with a key adds the gap to the real share; a failing search keeps the ranking", async () => {
+  const share = { assetId: "tesla", symbol: "TSLA", canonicalMarket: { price: 400, asOf: 1_000, source: "s" }, variants: [] };
+  interface Compared {
+    sharePrice: number | null;
+    ranked: { issuer: string; vsSharePct: number | null }[];
+  }
+  const keyed = await call<Compared>(new Tools(sources({ search: async () => [share] }), CATALOG), "compare_issuers", { symbol: "TSLA" });
+  assert.equal(keyed.sharePrice, 400);
+  assert.deepEqual(keyed.ranked.map((r) => [r.issuer, r.vsSharePct?.toFixed(2)]), [
+    ["Backed (xStock)", "0.00"],
+    ["Backpack Securities", "0.00"],
+    ["Ondo", "1.00"],
+  ]);
+  const broken = sources({ search: async () => { throw new Error("503"); } });
+  const fallback = await call<Compared>(new Tools(broken, CATALOG), "compare_issuers", { symbol: "TSLA" });
+  assert.equal(fallback.sharePrice, null);
+  assert.equal(fallback.ranked.length, 3);
+  assert.ok(fallback.ranked.every((r) => r.vsSharePct === null));
+});

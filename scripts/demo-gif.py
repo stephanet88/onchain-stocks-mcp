@@ -4,28 +4,29 @@ from PIL import Image, ImageDraw, ImageFont
 
 FONT_DIR = sys.argv[1]
 OUT = sys.argv[2]
-W, H, PAD, SIZE, LINE = 880, 450, 28, 15, 24
+W, H, PAD, SIZE, LINE = 880, 470, 28, 15, 24
 BG, FG, DIM, GREEN, BLUE, YELLOW = "#0f1115", "#e6e6e6", "#7d8590", "#7ee787", "#79c0ff", "#e3b341"
 regular = ImageFont.truetype(f"{FONT_DIR}/JetBrainsMono-Regular.ttf", SIZE)
 bold = ImageFont.truetype(f"{FONT_DIR}/JetBrainsMono-Bold.ttf", SIZE)
 
 # (text, color, bold, typed): typed lines appear character by character
 SCRIPT = [
-    ("$ claude mcp add onchain-stocks -- npx -y onchain-stocks-mcp", FG, False, True),
+    ("$ claude mcp add onchain-stocks -e TOKENS_API_KEY=… -- npx -y onchain-stocks-mcp", FG, False, True),
     ("", FG, False, False),
-    ("> Which tokenized Tesla on Solana is cheapest for $1,000,", FG, True, True),
-    ("  and what does the xStock cost per token at $50k?", FG, True, True),
+    ("> How does tokenized Tesla compare to the real share", FG, True, True),
+    ("  for a $1,000 buy?", FG, True, True),
     ("", FG, False, False),
-    ("  onchain-stocks · list_tokens(query: \"TSLA\")", BLUE, False, False),
     ("  onchain-stocks · compare_issuers(symbol: \"TSLA\", usd: 1000)", BLUE, False, False),
-    ("  onchain-stocks · quote_sizes(xStock TSLA)", BLUE, False, False),
     ("", FG, False, False),
-    ("  Cheapest: Backed xStock, $399.84 per token", GREEN, True, False),
-    ("  Backpack $400.30 · Ondo $571.57 (thin Jupiter route)", FG, False, False),
-    ("  xStock at $50k: $401.32 per token, +0.37% vs $1k", FG, False, False),
+    ("  Real TSLA share   $400.21   Friday close, market shut", FG, True, False),
     ("", FG, False, False),
-    ("  No API key. Jupiter quotes, not fills. Measured 2026-11-01.", DIM, False, False),
-    ("  Not investment advice.", YELLOW, False, False),
+    ("  Token             You pay   vs share", DIM, False, False),
+    ("  Backed xStock     $399.63    -0.14%", GREEN, False, False),
+    ("  Backpack          $400.09    -0.03%", GREEN, False, False),
+    ("  Ondo              $571.53   +42.81%   thin Jupiter route", YELLOW, False, False),
+    ("", FG, False, False),
+    ("  Price per token, Jupiter quotes not fills. Measured 2026-11-01.", DIM, False, False),
+    ("  Not investment advice.", DIM, False, False),
 ]
 
 
