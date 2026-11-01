@@ -34,7 +34,14 @@ test("a request that never answers is aborted at the timeout, not retried", asyn
   let calls = 0;
   const hang = ((_url: string, init?: RequestInit) => {
     calls += 1;
-    return new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener("abort", () => reject(init.signal?.reason)));
+    return new Promise<Response>((_resolve, reject) => {
+      // a real pending socket keeps the process alive; Node 22 does not count the abort timer itself
+      const pending = setTimeout(() => undefined, 60_000);
+      init?.signal?.addEventListener("abort", () => {
+        clearTimeout(pending);
+        reject(init.signal?.reason);
+      });
+    });
   }) as Fetch;
   await assert.rejects(getJson("https://x", {}, hang, 4, 1, 50), (err: Error) => err.name === "TimeoutError");
   assert.equal(calls, 1);
