@@ -1,0 +1,24 @@
+{
+  "name": "stockscope-mcp",
+  "version": "0.1.0",
+  "description": "MCP server: what a tokenized stock on Solana really costs against the real share",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "mcp": "node src/mcp.ts",
+    "test": "node --test test/",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.0",
+    "typescript": "^5.9.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "zod": "4.6.7"
+  }
+}
