@@ -9,7 +9,7 @@
   },
   "scripts": {
     "mcp": "node src/main.ts",
-    "test": "node --test test/",
+    "test": "node --test \"test/*.test.ts\"",
     "typecheck": "tsc",
     "lint": "eslint .",
     "build": "tsc -p tsconfig.build.json",
