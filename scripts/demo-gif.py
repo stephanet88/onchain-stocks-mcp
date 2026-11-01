@@ -60,6 +60,6 @@ for text, color, is_bold, typed in SCRIPT:
         frames.append(render(shown, False))
         durations.append(500 if text else 150)
 frames.append(render(shown, False))
-durations.append(4000)
+durations.append(7000)
 frames[0].save(OUT, save_all=True, append_images=frames[1:], duration=durations, loop=0, optimize=True)
 print(f"{len(frames)} frames -> {OUT}")
