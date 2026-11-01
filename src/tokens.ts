@@ -7,6 +7,7 @@ export interface Variant {
   mint: string;
   kind: string;
   label?: string;
+  name?: string;
   issuer?: string;
   liquidityTier?: string;
   trustTier?: string;
@@ -30,6 +31,17 @@ export interface RiskSummary {
   caps: string[];
   hasInsufficientData: boolean;
   insufficientDataReason: string | null;
+}
+
+interface CuratedResponse {
+  assets: StockAsset[];
+}
+
+// curated list "stocks" is sorted by 24h volume, so the first rows are the most traded
+export async function topStocks(apiKey: string, limit: number, fetchImpl?: Fetch): Promise<StockAsset[]> {
+  const url = `${BASE}/assets/curated?list=stocks&variants=all&limit=${limit}`;
+  const body = await getJson<CuratedResponse>(url, { "x-api-key": apiKey }, fetchImpl);
+  return body.assets;
 }
 
 export async function searchStocks(apiKey: string, query: string, fetchImpl?: Fetch): Promise<StockAsset[]> {

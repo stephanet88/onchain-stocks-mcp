@@ -1,6 +1,6 @@
 {
   "name": "onchain-stocks-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MCP server: what a tokenized stock on Solana really costs against the real share",
   "license": "MIT",
   "type": "module",
@@ -13,7 +13,8 @@
     "typecheck": "tsc",
     "lint": "eslint .",
     "build": "tsc -p tsconfig.build.json",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "catalog": "node --env-file=.env scripts/build-catalog.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -5,14 +5,12 @@ import { createServer } from "./mcp.ts";
 import { riskSummary, searchStocks } from "./tokens.ts";
 
 const apiKey = process.env.TOKENS_API_KEY;
-if (!apiKey) {
-  console.error("TOKENS_API_KEY is not set: get a key at tokens.xyz and pass it in your MCP client config");
-  process.exit(1);
-}
-const server = createServer({
-  search: (query) => searchStocks(apiKey, query),
-  quote: (mint, usd) => quoteBuy(mint, usd),
-  risk: (mint) => riskSummary(apiKey, mint),
-  now: () => Date.now(),
-});
+const keyless = { quote: (mint: string, usd: number) => quoteBuy(mint, usd), now: () => Date.now() };
+// stdout is the MCP channel, so notices go to stderr
+if (!apiKey) console.error("onchain-stocks-mcp: no TOKENS_API_KEY, keyless mode (list_tokens, quote_sizes, compare_issuers)");
+const server = createServer(
+  apiKey
+    ? { ...keyless, search: (query) => searchStocks(apiKey, query), risk: (mint) => riskSummary(apiKey, mint) }
+    : keyless,
+);
 await server.connect(new StdioServerTransport());

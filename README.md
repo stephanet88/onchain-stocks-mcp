@@ -1,29 +1,17 @@
 # onchain-stocks-mcp
 
-MCP server for tokenized stocks on Solana: what a buy really costs against the real share price.
+MCP server for tokenized stocks on Solana: which token is cheapest, what size costs you, and how a buy compares to the real share.
 
 Read-only. It never trades, holds keys or gives advice.
 
-![Demo: a $1,000 tokenized Tesla buy quoted at -0.07% vs the real share](demo.gif)
+![Demo: compare tokenized Tesla issuers and slippage, no API key](demo.gif)
 
-## Tools
+## Install
 
-| Tool | Returns |
-|---|---|
-| `search_stocks` | Tokens for a stock: issuer, redeemability, liquidity, listed price, plus the real share price and its age |
-| `quote_buy` | Price paid per token for a USDC buy (Jupiter quote, not a fill) and the all-in cost vs the share. Mint must come from a search |
-| `risk_score` | Market risk score 0 to 100, grade A/B/C, from tokens.xyz |
-
-Share prices are frozen outside US trading hours. Check `sharePriceAgeMinutes` before comparing.
-
-## Setup
-
-Needs Node 22+ and a [tokens.xyz](https://tokens.xyz) API key.
-
-Claude Code:
+No API key needed. Claude Code:
 
 ```
-claude mcp add onchain-stocks -e TOKENS_API_KEY=your_key -- npx -y onchain-stocks-mcp
+claude mcp add onchain-stocks -- npx -y onchain-stocks-mcp
 ```
 
 Other clients (Claude Desktop, Cursor):
@@ -33,21 +21,49 @@ Other clients (Claude Desktop, Cursor):
   "mcpServers": {
     "onchain-stocks": {
       "command": "npx",
-      "args": ["-y", "onchain-stocks-mcp"],
-      "env": { "TOKENS_API_KEY": "your_key" }
+      "args": ["-y", "onchain-stocks-mcp"]
     }
   }
 }
 ```
 
-Then ask: "What does a $10k buy of tokenized Tesla cost vs the real share?"
+Then ask: "Which tokenized Tesla is cheapest to buy for $1,000?"
+
+Needs Node 22+.
+
+## Tools
+
+Without a key:
+
+| Tool | Returns |
+|---|---|
+| `list_tokens` | The 129 tokens of 84 stocks covered: issuer, redeemability, mint |
+| `compare_issuers` | The same buy quoted for every issuer's token of one stock (xStock, Ondo, Backpack...), ranked by price per token |
+| `quote_sizes` | One token quoted at up to 5 sizes, and how much more each size pays per token than the smallest (slippage) |
+
+With a [tokens.xyz](https://tokens.xyz) key (`TOKENS_API_KEY`), three more:
+
+| Tool | Returns |
+|---|---|
+| `search_stocks` | Every token of a stock, plus the real share price and its age |
+| `quote_buy` | The all-in cost of a buy against the real share price |
+| `risk_score` | Market risk score 0 to 100, grade A/B/C |
+
+Add the key with `-e TOKENS_API_KEY=your_key` before `--` in the Claude Code command, or as `"env"` in the JSON config.
+
+## Read the numbers right
+
+- Quotes are Jupiter routes, not fills, and not the issuer's own mint or redeem price. A token far above the others usually means a thin route.
+- Tokens of one stock can differ in what they represent (redeemability, dividends). Check `redeemable`.
+- Share prices are frozen outside US trading hours. Check `sharePriceAgeMinutes`.
 
 ## Data sources
 
 | Data | Source |
 |---|---|
-| Tokens, share prices, risk | api.tokens.xyz/v1 |
 | Buy quotes | Jupiter lite API (free, rate-limited: errors are returned, never guessed) |
+| Built-in token list | api.tokens.xyz, generated 2026-11-01 (`npm run catalog` to refresh) |
+| Share prices, search, risk | api.tokens.xyz (key required) |
 
 ## Development
 

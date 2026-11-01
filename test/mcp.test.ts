@@ -51,10 +51,10 @@ async function call(client: Client, name: string, args: Record<string, unknown>)
   return { isError: res.isError === true, body: JSON.parse(first.text) };
 }
 
-test("lists the three read-only tools with instructions", async () => {
+test("with a key: all six read-only tools, with instructions", async () => {
   const client = await connect();
   const { tools } = await client.listTools();
-  assert.deepEqual(tools.map((t) => t.name).sort(), ["quote_buy", "risk_score", "search_stocks"]);
+  assert.deepEqual(tools.map((t) => t.name).sort(), ["compare_issuers", "list_tokens", "quote_buy", "quote_sizes", "risk_score", "search_stocks"]);
   assert.ok(tools.every((t) => t.annotations?.readOnlyHint === true));
   assert.match(client.getInstructions() ?? "", /not fills/);
 });
@@ -98,4 +98,14 @@ test("arguments of the wrong type are rejected before reaching the tools", async
   const client = await connect();
   const res = await client.callTool({ name: "quote_buy", arguments: { mint: "TSLAX", usd: "lots" } });
   assert.equal(res.isError, true);
+});
+
+test("without a key: only the keyless tools are offered, and they answer", async () => {
+  const { quote, now } = sources();
+  const client = await connect({ quote, now });
+  const { tools } = await client.listTools();
+  assert.deepEqual(tools.map((t) => t.name).sort(), ["compare_issuers", "list_tokens", "quote_sizes"]);
+  const list = await call(client, "list_tokens", { query: "TSLA" });
+  assert.equal(list.isError, false);
+  assert.ok(list.body.results.length > 0, "the built-in list covers TSLA");
 });
