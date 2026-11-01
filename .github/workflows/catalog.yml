@@ -1,0 +1,39 @@
+name: Refresh token list
+
+# Weekly: rebuild src/catalog.ts from tokens.xyz and open a pull request if the list changed.
+# It never publishes; merging and tagging stay manual.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      - run: npm run catalog
+        env:
+          TOKENS_API_KEY: ${{ secrets.TOKENS_API_KEY }}
+      - name: Open a pull request if the list changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git diff --quiet src/catalog.ts && { echo "token list unchanged"; exit 0; }
+          npm test
+          branch="catalog/$(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -am "Token list refresh $(date -u +%Y-%m-%d)"
+          git push origin "$branch"
+          gh pr create --title "Token list refresh $(date -u +%Y-%m-%d)" --body "Weekly rebuild from tokens.xyz. Review the diff, merge, then tag a patch release."

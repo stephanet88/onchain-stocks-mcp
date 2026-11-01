@@ -59,6 +59,15 @@ Add the key with `-e TOKENS_API_KEY=your_key` before `--` in the Claude Code com
 - Tokens of one stock can differ in what they represent (redeemability, dividends). Check `redeemable`.
 - Share prices are frozen outside US trading hours. Check `sharePriceAgeMinutes`.
 
+## Limits
+
+| Limit | Detail |
+|---|---|
+| Jupiter rate limit | The free quote API allows a short burst, then about one quote every 2 s per IP (measured 2026-11-01, `scripts/probe-jupiter.ts`). Each user runs the server locally, so limits are per user. Tools retry with backoff and cache identical quotes for 15 s |
+| Real share price | Needs a tokens.xyz key. No free source exists: Pyth, the usual oracle, requires an API key since August 2026 |
+| Token list | Built in, refreshed weekly by a pull request. Tokens launched since the last release are missing until then |
+| Chains | Solana only |
+
 ## Data sources
 
 | Data | Source |
