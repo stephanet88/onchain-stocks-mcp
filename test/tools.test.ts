@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { HttpError } from "../src/http.ts";
+import { CATALOG as BUILT_IN, parseCatalog } from "../src/catalog.ts";
 import { issuerName } from "../src/issuer.ts";
 import { Session } from "../src/session.ts";
 import type { Catalog, Sources } from "../src/types.ts";
@@ -175,4 +176,11 @@ test("the tool call deadline returns what arrived in time and labels the rest", 
   assert.ok(Date.now() - started < 1_000, "returned at the deadline, not after the hung requests");
   assert.deepEqual(res.ranked.map((r) => r.issuer), ["Backed (xStock)"]);
   assert.deepEqual(res.failed.map((f) => f.error), ["tool time limit reached", "tool time limit reached"]);
+});
+
+test("the built-in token list loads, and a corrupted one is rejected instead of used", () => {
+  assert.ok(BUILT_IN.tokens.length > 100);
+  assert.ok(BUILT_IN.tokens.every((t) => t.mint.length > 30 && t.decimals >= 0));
+  assert.throws(() => parseCatalog({ generatedAt: "x", tokens: [{ symbol: "TSLA", mint: "M" }] }));
+  assert.throws(() => parseCatalog({ generatedAt: "x", tokens: [{ ...BUILT_IN.tokens[0], redeemable: "maybe" }] }));
 });

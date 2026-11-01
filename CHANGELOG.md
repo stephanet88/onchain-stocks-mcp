@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+- No type casts in the tool layer: each tool validates its own arguments.
+- Token list is `src/catalog.json`, validated at startup, so a broken file fails loudly.
+- `npm run build` cleans `dist/` first (0.3.0 and 0.3.1 shipped a leftover `dist/tools.js`, unused).
+
 ## 0.3.1
 
 - Each tool call has a 30 s deadline: in-flight requests and retry waits are cancelled, and the tool returns what arrived in time, labelling the rest "tool time limit reached".

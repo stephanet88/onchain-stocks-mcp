@@ -1,6 +1,6 @@
 name: Refresh token list
 
-# Weekly: rebuild src/catalog.ts from tokens.xyz and open a pull request if the list changed.
+# Weekly: rebuild src/catalog.json from tokens.xyz and open a pull request if the list changed.
 # It never publishes; merging and tagging stay manual.
 on:
   schedule:
@@ -28,7 +28,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          git diff --quiet src/catalog.ts && { echo "token list unchanged"; exit 0; }
+          git diff --quiet src/catalog.json && { echo "token list unchanged"; exit 0; }
           npm test
           branch="catalog/$(date -u +%Y-%m-%d)"
           git config user.name "github-actions[bot]"

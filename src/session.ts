@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { CATALOG } from "./catalog.ts";
 import { DeadlineError, describeError } from "./http.ts";
 import { KEYED_TOOLS } from "./keyed.ts";
@@ -44,12 +43,10 @@ export class Session {
       const needsKey = ALL_TOOLS.some((t) => t.name === name && t.keyed);
       return { error: needsKey ? "this tool needs a TOKENS_API_KEY: use list_tokens, compare_issuers and quote_sizes without one" : `unknown tool ${name}` };
     }
-    const parsed = z.object(tool.input).safeParse(args ?? {});
-    if (!parsed.success) return { error: `bad arguments: ${parsed.error.issues.map((i) => `${i.path.join(".") || "input"} ${i.message}`).join("; ")}` };
     const deadline = new AbortController();
     const timer = setTimeout(() => deadline.abort(new DeadlineError()), this.deadlineMs);
     try {
-      return await tool.run(this, parsed.data, deadline.signal);
+      return await tool.call(this, args, deadline.signal);
     } catch (err) {
       return { error: `source ${describeError(err)}` };
     } finally {

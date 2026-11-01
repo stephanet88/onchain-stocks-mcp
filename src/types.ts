@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import { z } from "zod";
 import type { Quote } from "./jupiter.ts";
 import type { Session } from "./session.ts";
 import type { RiskSummary, StockAsset, Variant } from "./tokens.ts";
@@ -38,8 +38,8 @@ export interface ToolDef {
   description: string;
   keyed: boolean;
   input: z.ZodRawShape;
-  // signal fires at the tool call's deadline; pass it to every request
-  run: (session: Session, args: Record<string, unknown>, signal: AbortSignal) => Promise<unknown>;
+  // validates the raw arguments, then runs; signal fires at the tool call's deadline
+  call: (session: Session, args: unknown, signal: AbortSignal) => Promise<unknown>;
 }
 
 export function defineTool<S extends z.ZodRawShape>(def: {
@@ -49,5 +49,16 @@ export function defineTool<S extends z.ZodRawShape>(def: {
   input: S;
   run: (session: Session, args: z.infer<z.ZodObject<S>>, signal: AbortSignal) => Promise<unknown>;
 }): ToolDef {
-  return def as unknown as ToolDef;
+  const schema = z.object(def.input);
+  return {
+    name: def.name,
+    description: def.description,
+    keyed: def.keyed,
+    input: def.input,
+    call: async (session, args, signal) => {
+      const parsed = schema.safeParse(args ?? {});
+      if (!parsed.success) return { error: `bad arguments: ${parsed.error.issues.map((i) => `${i.path.join(".") || "input"} ${i.message}`).join("; ")}` };
+      return def.run(session, parsed.data, signal);
+    },
+  };
 }
