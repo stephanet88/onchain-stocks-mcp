@@ -16,18 +16,18 @@ Share prices are frozen outside US trading hours. Check `sharePriceAgeMinutes` b
 
 ## Setup
 
-Needs Node 26+ and a [tokens.xyz](https://tokens.xyz) API key.
+Needs Node 22+ and a [tokens.xyz](https://tokens.xyz) API key.
 
 ```
 git clone https://github.com/stephanet88/stockscope-mcp
 cd stockscope-mcp
-npm install
+npm install   # also builds dist/
 ```
 
 Claude Code:
 
 ```
-claude mcp add stockscope -e TOKENS_API_KEY=your_key -- node /path/to/stockscope-mcp/src/mcp.ts
+claude mcp add stockscope -e TOKENS_API_KEY=your_key -- node /path/to/stockscope-mcp/dist/main.js
 ```
 
 Other clients (Claude Desktop, Cursor):
@@ -37,7 +37,7 @@ Other clients (Claude Desktop, Cursor):
   "mcpServers": {
     "stockscope": {
       "command": "node",
-      "args": ["/path/to/stockscope-mcp/src/mcp.ts"],
+      "args": ["/path/to/stockscope-mcp/dist/main.js"],
       "env": { "TOKENS_API_KEY": "your_key" }
     }
   }
@@ -57,6 +57,8 @@ Then ask: "What does a $10k buy of tokenized Tesla cost vs the real share?"
 
 ```
 npm test
+npm run lint
+npm run typecheck
 ```
 
 Not investment advice.
