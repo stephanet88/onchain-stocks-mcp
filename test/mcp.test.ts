@@ -46,8 +46,9 @@ async function connect(src: Sources = sources()) {
 
 async function call(client: Client, name: string, args: Record<string, unknown>) {
   const res = await client.callTool({ name, arguments: args });
-  const content = res.content as Array<{ type: string; text: string }>;
-  return { isError: res.isError === true, body: JSON.parse(content[0]!.text) };
+  const [first] = res.content as { type: string; text: string }[];
+  assert.ok(first, "tool returned no content");
+  return { isError: res.isError === true, body: JSON.parse(first.text) };
 }
 
 test("lists the three read-only tools with instructions", async () => {

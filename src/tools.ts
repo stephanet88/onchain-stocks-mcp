@@ -18,7 +18,8 @@ const ISSUER_BY_LABEL: Record<string, string> = { xStock: "Backed (xStock)" };
 
 export function issuerName(variant: Variant, symbol: string | undefined): string {
   if (variant.issuer) return variant.issuer === "Backed" ? "Backed (xStock)" : variant.issuer;
-  if (variant.label && ISSUER_BY_LABEL[variant.label]) return ISSUER_BY_LABEL[variant.label]!;
+  const mapped = variant.label ? ISSUER_BY_LABEL[variant.label] : undefined;
+  if (mapped) return mapped;
   // some variants carry only the ticker as label, which says nothing about who issued them
   if (variant.label && variant.label !== symbol) return variant.label;
   return "unknown";

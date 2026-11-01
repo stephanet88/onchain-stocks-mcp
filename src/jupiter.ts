@@ -8,7 +8,7 @@ export interface Quote {
   inAmount: string;
   outAmount: string;
   priceImpactPct: string;
-  routePlan: Array<{ swapInfo: { label?: string } }>;
+  routePlan: { swapInfo: { label?: string } }[];
 }
 
 // buy `usd` worth of `mint` with USDC; amounts are in base units

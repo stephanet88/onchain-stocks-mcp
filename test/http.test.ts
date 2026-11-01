@@ -5,7 +5,7 @@ import { getJson, HttpError, type Fetch } from "../src/http.ts";
 function fakeFetch(statuses: number[]): { fetch: Fetch; calls: () => number } {
   let n = 0;
   const fetch = (async () => {
-    const status = statuses[Math.min(n, statuses.length - 1)]!;
+    const status = statuses[Math.min(n, statuses.length - 1)] ?? 200;
     n += 1;
     return new Response(status === 200 ? '{"ok":true}' : "nope", { status });
   }) as Fetch;

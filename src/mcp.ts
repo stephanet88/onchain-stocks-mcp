@@ -8,9 +8,9 @@ import { MAX_BUY_USD, TOOL_SPECS, Tools, type Sources } from "./tools.ts";
 const INSTRUCTIONS =
   "Read-only data on tokenized stocks on Solana. Quotes are Jupiter quotes, not fills. Share prices are frozen outside US trading hours: check sharePriceAgeMinutes. Never present results as investment advice.";
 
-const description = (name: string) => TOOL_SPECS.find((t) => t.function.name === name)!.function.description;
+type ToolName = (typeof TOOL_SPECS)[number]["function"]["name"];
 
-const INPUTS = {
+const INPUTS: Record<ToolName, z.ZodRawShape> = {
   search_stocks: { query: z.string().describe("Company name or ticker, e.g. Tesla or NVDA") },
   quote_buy: { mint: z.string(), usd: z.number().describe(`Amount of USDC, 1 to ${MAX_BUY_USD}`) },
   risk_score: { mint: z.string() },
@@ -20,10 +20,11 @@ const INPUTS = {
 export function createServer(sources: Sources): McpServer {
   const server = new McpServer({ name: "stockscope", version: "0.1.0" }, { instructions: INSTRUCTIONS });
   const tools = new Tools(sources);
-  for (const [name, inputSchema] of Object.entries(INPUTS)) {
+  for (const { function: spec } of TOOL_SPECS) {
+    const name = spec.name;
     server.registerTool(
       name,
-      { description: description(name), inputSchema, annotations: { readOnlyHint: true, openWorldHint: true } },
+      { description: spec.description, inputSchema: INPUTS[name], annotations: { readOnlyHint: true, openWorldHint: true } },
       async (args: Record<string, unknown>) => {
         const result = await tools.call(name, JSON.stringify(args));
         const isError = typeof result === "object" && result !== null && "error" in result;
