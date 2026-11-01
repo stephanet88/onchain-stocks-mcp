@@ -4,6 +4,8 @@ MCP server for tokenized stocks on Solana: what a buy really costs against the r
 
 Read-only. It never trades, holds keys or gives advice.
 
+![Demo: a $1,000 tokenized Tesla buy quoted at -0.07% vs the real share](demo.gif)
+
 ## Tools
 
 | Tool | Returns |
