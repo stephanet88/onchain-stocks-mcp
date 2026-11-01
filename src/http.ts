@@ -20,12 +20,25 @@ export async function getJson<T>(
   fetchImpl: Fetch = fetch,
   maxRetries = 4,
   baseDelayMs = 250,
+  timeoutMs = 10_000,
 ): Promise<T> {
   for (let attempt = 0; ; attempt += 1) {
-    const res = await fetchImpl(url, { headers: { accept: "application/json", ...headers } });
+    // a hung upstream must not hang the caller's tool call; a timeout is not retried
+    const res = await fetchImpl(url, { headers: { accept: "application/json", ...headers }, signal: AbortSignal.timeout(timeoutMs) });
     if (res.ok) return (await res.json()) as T;
     const retryable = res.status === 429 || res.status >= 500;
     if (!retryable || attempt >= maxRetries) throw new HttpError(url, res.status, await res.text());
     await sleep(baseDelayMs * 2 ** attempt + Math.floor(Math.random() * 150));
   }
+}
+
+// one label per failure cause, so a 429 is never shown as a missing route or a crash
+export function describeError(err: unknown): string {
+  if (err instanceof Error && err.name === "TimeoutError") return "timed out";
+  if (err instanceof HttpError) {
+    if (err.status === 429) return "rate limited";
+    if (/route/i.test(err.body)) return "no route";
+    return `upstream error ${err.status}`;
+  }
+  return `failed: ${err instanceof Error ? err.message.slice(0, 200) : String(err)}`;
 }

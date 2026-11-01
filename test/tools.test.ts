@@ -1,7 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { HttpError } from "../src/http.ts";
-import { issuerName, Tools, type Catalog, type Sources } from "../src/tools.ts";
+import { issuerName } from "../src/issuer.ts";
+import { Session } from "../src/session.ts";
+import type { Catalog, Sources } from "../src/types.ts";
 import type { Variant } from "../src/tokens.ts";
 
 const CATALOG: Catalog = {
@@ -28,16 +30,16 @@ function sources(over: Partial<Sources> = {}): Sources {
   };
 }
 
-const call = <T = { error?: string }>(tools: Tools, name: string, args: unknown) => tools.call(name, JSON.stringify(args)) as Promise<T>;
+const call = <T = { error?: string }>(session: Session, name: string, args: unknown) => session.call(name, args) as Promise<T>;
 
 test("list_tokens filters by ticker or name, empty query lists all", async () => {
-  const tools = new Tools(sources(), CATALOG);
+  const session = new Session(sources(), CATALOG);
   interface List {
     results: { mint: string }[];
   }
-  assert.equal((await call<List>(tools, "list_tokens", { query: "tsla" })).results.length, 3);
-  assert.deepEqual((await call<List>(tools, "list_tokens", { query: "nvid" })).results.map((r) => r.mint), ["NV"]);
-  assert.equal((await call<List>(tools, "list_tokens", {})).results.length, 4);
+  assert.equal((await call<List>(session, "list_tokens", { query: "tsla" })).results.length, 3);
+  assert.deepEqual((await call<List>(session, "list_tokens", { query: "nvid" })).results.map((r) => r.mint), ["NV"]);
+  assert.equal((await call<List>(session, "list_tokens", {})).results.length, 4);
 });
 
 test("quote_sizes: slippage against the smallest size, sorted, per-size errors kept", async () => {
@@ -49,7 +51,7 @@ test("quote_sizes: slippage against the smallest size, sorted, per-size errors k
       return sources().quote(mint, usd);
     },
   });
-  const res = await call<{ quotes: { usd: number; vsSmallestPct?: number | null; error?: string }[] }>(new Tools(flaky, CATALOG), "quote_sizes", {
+  const res = await call<{ quotes: { usd: number; vsSmallestPct?: number | null; error?: string }[] }>(new Session(flaky, CATALOG), "quote_sizes", {
     mint: "XS",
     sizes: [20_000, 1_000, 10_000],
   });
@@ -61,10 +63,10 @@ test("quote_sizes: slippage against the smallest size, sorted, per-size errors k
 });
 
 test("quote_sizes refuses unknown mints and bad sizes", async () => {
-  const tools = new Tools(sources(), CATALOG);
-  assert.match(String((await call(tools, "quote_sizes", { mint: "SCAM" })).error), /list_tokens/);
+  const session = new Session(sources(), CATALOG);
+  assert.match(String((await call(session, "quote_sizes", { mint: "SCAM" })).error), /list_tokens/);
   for (const sizes of [[], [0], [1, 2, 3, 4, 5, 6], ["lots"], [1e9]]) {
-    assert.match(String((await call(tools, "quote_sizes", { mint: "XS", sizes })).error), /sizes must be/, JSON.stringify(sizes));
+    assert.match(String((await call(session, "quote_sizes", { mint: "XS", sizes })).error), /bad arguments: sizes/, JSON.stringify(sizes));
   }
 });
 
@@ -76,7 +78,7 @@ test("compare_issuers ranks by price per token across decimals, failures listed 
     },
   });
   const res = await call<{ ranked: { issuer: string; pricePerToken: number; vsCheapestPct: number }[]; failed: { issuer: string; error: string }[] }>(
-    new Tools(failing, CATALOG),
+    new Session(failing, CATALOG),
     "compare_issuers",
     { symbol: "tsla", usd: 1_000 },
   );
@@ -88,15 +90,15 @@ test("compare_issuers ranks by price per token across decimals, failures listed 
 });
 
 test("compare_issuers: unknown ticker and bad amount are errors", async () => {
-  const tools = new Tools(sources(), CATALOG);
-  assert.match(String((await call(tools, "compare_issuers", { symbol: "ZZZZ" })).error), /no tokens/);
-  assert.match(String((await call(tools, "compare_issuers", { symbol: "TSLA", usd: -5 })).error), /usd must be/);
+  const session = new Session(sources(), CATALOG);
+  assert.match(String((await call(session, "compare_issuers", { symbol: "ZZZZ" })).error), /no tokens/);
+  assert.match(String((await call(session, "compare_issuers", { symbol: "TSLA", usd: -5 })).error), /bad arguments: usd/);
 });
 
 test("keyed tools without a key say so instead of failing", async () => {
-  const tools = new Tools(sources(), CATALOG);
-  assert.match(String((await call(tools, "search_stocks", { query: "Tesla" })).error), /TOKENS_API_KEY/);
-  assert.match(String((await call(tools, "risk_score", { mint: "XS" })).error), /TOKENS_API_KEY/);
+  const session = new Session(sources(), CATALOG);
+  assert.match(String((await call(session, "search_stocks", { query: "Tesla" })).error), /TOKENS_API_KEY/);
+  assert.match(String((await call(session, "risk_score", { mint: "XS" })).error), /TOKENS_API_KEY/);
 });
 
 test("issuer from the name when there is no issuer field, ticker labels ignored in any case", () => {
@@ -113,7 +115,7 @@ test("compare_issuers with a key adds the gap to the real share; a failing searc
     sharePrice: number | null;
     ranked: { issuer: string; vsSharePct: number | null }[];
   }
-  const keyed = await call<Compared>(new Tools(sources({ search: async () => [share] }), CATALOG), "compare_issuers", { symbol: "TSLA" });
+  const keyed = await call<Compared>(new Session(sources({ search: async () => [share] }), CATALOG), "compare_issuers", { symbol: "TSLA" });
   assert.equal(keyed.sharePrice, 400);
   assert.deepEqual(keyed.ranked.map((r) => [r.issuer, r.vsSharePct?.toFixed(2)]), [
     ["Backed (xStock)", "0.00"],
@@ -121,8 +123,29 @@ test("compare_issuers with a key adds the gap to the real share; a failing searc
     ["Ondo", "1.00"],
   ]);
   const broken = sources({ search: async () => { throw new Error("503"); } });
-  const fallback = await call<Compared>(new Tools(broken, CATALOG), "compare_issuers", { symbol: "TSLA" });
+  const fallback = await call<Compared>(new Session(broken, CATALOG), "compare_issuers", { symbol: "TSLA" });
   assert.equal(fallback.sharePrice, null);
   assert.equal(fallback.ranked.length, 3);
   assert.ok(fallback.ranked.every((r) => r.vsSharePct === null));
+});
+
+test("a hung or failing upstream becomes a labelled error, never a hang or a crash", async () => {
+  const timeout = Object.assign(new Error("The operation was aborted due to timeout"), { name: "TimeoutError" });
+  const slow = sources({ quote: async () => { throw timeout; } });
+  const res = await call<{ quotes: { error?: string }[] }>(new Session(slow, CATALOG), "quote_sizes", { mint: "XS", sizes: [1_000] });
+  assert.equal(res.quotes[0]?.error, "timed out");
+  const keyed = sources({ search: async () => { throw timeout; }, risk: async () => { throw new HttpError("u", 503, "down"); } });
+  assert.equal((await call(new Session(keyed, CATALOG), "search_stocks", { query: "Tesla" })).error, "source timed out");
+});
+
+test("unknown tools and missing arguments are rejected by name", async () => {
+  const session = new Session(sources(), CATALOG);
+  assert.match(String((await call(session, "trade_now", {})).error), /unknown tool trade_now/);
+  assert.match(String((await call(session, "compare_issuers", {})).error), /bad arguments: symbol/);
+});
+
+test("issuer from the last dash segment, so company names with dashes survive", () => {
+  const base: Variant = { variantId: "v", mint: "m", kind: "tokenized_equity", advisory: null, market: null };
+  assert.equal(issuerName({ ...base, label: "KO", name: "Coca - Cola - Ondo" }, "KO"), "Ondo");
+  assert.equal(issuerName({ ...base, label: "KO", name: "Coca-Cola" }, "KO"), "unknown");
 });

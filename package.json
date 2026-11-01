@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "build": "tsc -p tsconfig.build.json",
     "prepare": "npm run build",
-    "catalog": "node --env-file=.env scripts/build-catalog.ts"
+    "catalog": "node --env-file-if-exists=.env scripts/build-catalog.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

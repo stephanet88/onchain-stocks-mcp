@@ -6,6 +6,8 @@ Read-only. It never trades, holds keys or gives advice.
 
 ![Demo: tokenized Tesla from three issuers vs the real share price](demo.gif)
 
+The demo runs with a key, which adds the comparison to the real share. Without one, the tokens are compared with each other.
+
 ## Install
 
 No API key needed. Claude Code:

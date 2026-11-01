@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createServer } from "../src/mcp.ts";
-import type { Sources } from "../src/tools.ts";
+import type { Sources } from "../src/types.ts";
 import type { StockAsset } from "../src/tokens.ts";
 
 const TESLA: StockAsset = {
@@ -87,7 +87,8 @@ test("searches do not leak between clients", async () => {
 test("out-of-range amounts and failing sources come back as errors, the server keeps serving", async () => {
   const client = await connect(sources({ risk: async () => { throw new Error("503 from tokens.xyz"); } }));
   await call(client, "search_stocks", { query: "Tesla" });
-  assert.equal((await call(client, "quote_buy", { mint: "TSLAX", usd: 10_000_000 })).isError, true);
+  // schema-level rejection: the MCP layer answers before the tool runs
+  assert.equal((await client.callTool({ name: "quote_buy", arguments: { mint: "TSLAX", usd: 10_000_000 } })).isError, true);
   const risk = await call(client, "risk_score", { mint: "TSLAX" });
   assert.equal(risk.isError, true);
   assert.match(risk.body.error, /source failed: 503/);
