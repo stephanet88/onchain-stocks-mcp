@@ -1,5 +1,5 @@
 {
-  "name": "stockscope-mcp",
+  "name": "onchain-stocks-mcp",
   "version": "0.1.0",
   "description": "MCP server: what a tokenized stock on Solana really costs against the real share",
   "license": "MIT",
@@ -27,6 +27,21 @@
     "zod": "4.6.7"
   },
   "bin": {
-    "stockscope-mcp": "dist/main.js"
-  }
+    "onchain-stocks-mcp": "dist/main.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephanet88/onchain-stocks-mcp.git"
+  },
+  "homepage": "https://github.com/stephanet88/onchain-stocks-mcp",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "solana",
+    "tokenized-stocks",
+    "xstocks"
+  ]
 }

@@ -15,7 +15,7 @@ const INPUTS: Record<ToolName, z.ZodRawShape> = {
 
 // one server per client connection, so the mints a search returned stay scoped to that client
 export function createServer(sources: Sources): McpServer {
-  const server = new McpServer({ name: "stockscope", version: "0.1.0" }, { instructions: INSTRUCTIONS });
+  const server = new McpServer({ name: "onchain-stocks", version: "0.1.0" }, { instructions: INSTRUCTIONS });
   const tools = new Tools(sources);
   for (const { function: spec } of TOOL_SPECS) {
     const name = spec.name;

@@ -1,4 +1,4 @@
-# stockscope-mcp
+# onchain-stocks-mcp
 
 MCP server for tokenized stocks on Solana: what a buy really costs against the real share price.
 
@@ -18,16 +18,10 @@ Share prices are frozen outside US trading hours. Check `sharePriceAgeMinutes` b
 
 Needs Node 22+ and a [tokens.xyz](https://tokens.xyz) API key.
 
-```
-git clone https://github.com/stephanet88/stockscope-mcp
-cd stockscope-mcp
-npm install   # also builds dist/
-```
-
 Claude Code:
 
 ```
-claude mcp add stockscope -e TOKENS_API_KEY=your_key -- node /path/to/stockscope-mcp/dist/main.js
+claude mcp add onchain-stocks -e TOKENS_API_KEY=your_key -- npx -y onchain-stocks-mcp
 ```
 
 Other clients (Claude Desktop, Cursor):
@@ -35,9 +29,9 @@ Other clients (Claude Desktop, Cursor):
 ```json
 {
   "mcpServers": {
-    "stockscope": {
-      "command": "node",
-      "args": ["/path/to/stockscope-mcp/dist/main.js"],
+    "onchain-stocks": {
+      "command": "npx",
+      "args": ["-y", "onchain-stocks-mcp"],
       "env": { "TOKENS_API_KEY": "your_key" }
     }
   }
@@ -53,9 +47,12 @@ Then ask: "What does a $10k buy of tokenized Tesla cost vs the real share?"
 | Tokens, share prices, risk | api.tokens.xyz/v1 |
 | Buy quotes | Jupiter lite API (free, rate-limited: errors are returned, never guessed) |
 
-## Tests
+## Development
 
 ```
+git clone https://github.com/stephanet88/onchain-stocks-mcp
+cd onchain-stocks-mcp
+npm install   # also builds dist/
 npm test
 npm run lint
 npm run typecheck
