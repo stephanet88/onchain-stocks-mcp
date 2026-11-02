@@ -39,7 +39,7 @@ Without a key:
 
 | Tool | Returns |
 |---|---|
-| `list_tokens` | The 129 tokens of 84 stocks covered: issuer, redeemability, mint |
+| `list_tokens` | Every token covered (about 130 across 85 stocks): issuer, redeemability, mint |
 | `compare_issuers` | The same buy quoted for every issuer's token of one stock (xStock, Ondo, Backpack...), ranked by price per token. With a key, also vs the real share price |
 | `quote_sizes` | One token quoted at up to 5 sizes, and how much more each size pays per token than the smallest (slippage) |
 
@@ -73,7 +73,7 @@ Add the key with `-e TOKENS_API_KEY=your_key` before `--` in the Claude Code com
 | Data | Source |
 |---|---|
 | Buy quotes | Jupiter lite API (free, rate-limited: errors are returned, never guessed) |
-| Built-in token list | api.tokens.xyz, generated 2026-11-01 (`npm run catalog` to refresh) |
+| Built-in token list | api.tokens.xyz, refreshed weekly by a pull request (`npm run catalog` by hand) |
 | Share prices, search, risk | api.tokens.xyz (key required) |
 
 ## Development

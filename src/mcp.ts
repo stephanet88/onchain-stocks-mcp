@@ -6,7 +6,7 @@ const INSTRUCTIONS =
   "Read-only data on tokenized stocks on Solana. Quotes are Jupiter quotes, not fills. Share prices are frozen outside US trading hours: check sharePriceAgeMinutes. Never present results as investment advice.";
 
 export function createServer(sources: Sources): McpServer {
-  const server = new McpServer({ name: "onchain-stocks", version: "0.3.2" }, { instructions: INSTRUCTIONS });
+  const server = new McpServer({ name: "onchain-stocks", version: "0.3.3" }, { instructions: INSTRUCTIONS });
   const session = new Session(sources);
   for (const tool of session.tools()) {
     server.registerTool(

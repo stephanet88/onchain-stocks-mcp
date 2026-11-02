@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.3
+
+- Token list refreshed 2026-11-02 by the weekly job: Visa, AppLovin, Vertiv, MP Materials and more issuers for Alphabet, MicroStrategy and SpaceX added; Moderna, Novo Nordisk and UnitedHealth dropped below the liquidity bar.
+
 ## 0.3.2
 
 - No type casts in the tool layer: each tool validates its own arguments.
