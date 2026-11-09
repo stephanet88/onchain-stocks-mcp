@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02",
+  "generatedAt": "2026-11-09",
   "tokens": [
     {
       "symbol": "AAPL",
@@ -34,14 +34,6 @@
       "redeemable": "cash_redeemable"
     },
     {
-      "symbol": "AMBR",
-      "name": "Amber",
-      "issuer": "Backed (xStock)",
-      "mint": "XsaQTCgebC2KPbf27KUhdv5JFvHhQ4GDAPURwrEhAzb",
-      "decimals": 8,
-      "redeemable": "cash_redeemable"
-    },
-    {
       "symbol": "AMC",
       "name": "AMC Entertainment",
       "issuer": "Backpack Securities",
@@ -56,6 +48,14 @@
       "mint": "AMD8XwJXgQ9WV45Wyj9yFLejxzf2J6VM1PJY8bJEjeES",
       "decimals": 6,
       "redeemable": "share_redeemable"
+    },
+    {
+      "symbol": "AMD",
+      "name": "AMD",
+      "issuer": "Ondo",
+      "mint": "14diAn5z8kjrKwSC8WLqvBqqe5YmihJhjxRxd8Z6ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "AMZN",
@@ -98,14 +98,6 @@
       "redeemable": "not_redeemable"
     },
     {
-      "symbol": "APP",
-      "name": "AppLovin",
-      "issuer": "Ondo",
-      "mint": "14Z8rQQe2Aza33YgEUmj3g3QGNz8DXLiFPuCnsD1ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
-    },
-    {
       "symbol": "ARM",
       "name": "Arm Holdings plc",
       "issuer": "Backpack Securities",
@@ -118,6 +110,14 @@
       "name": "Arm Holdings plc",
       "issuer": "Ondo",
       "mint": "15SsCZqCsM9fZGhTmP4rdJTPT9WGZKazDSsgeQ8ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
+      "symbol": "ASML",
+      "name": "ASML",
+      "issuer": "Ondo",
+      "mint": "1eLZPRsn8bAKmoxsqDMH9Q2m2k7GMNp6RLSQGm8ondo",
       "decimals": 9,
       "redeemable": "cash_redeemable"
     },
@@ -344,14 +344,6 @@
       "mint": "GooGLMvZtJZXHdNZy95RUrAMCCKxV6ghK3qE5ddBgVm5",
       "decimals": 6,
       "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "GOOGL",
-      "name": "Alphabet",
-      "issuer": "Ondo",
-      "mint": "bbahNA5vT9WJeYft8tALrH1LXWffjwqVoUbqYa1ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "GPRO",
@@ -586,12 +578,12 @@
       "redeemable": "cash_redeemable"
     },
     {
-      "symbol": "MP",
-      "name": "MP Materials",
-      "issuer": "Ondo",
-      "mint": "XwFm5GiKPVTvPiEbQpdc6vJbFEpsUXRMf6TcSxnondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
+      "symbol": "MNST",
+      "name": "Monster",
+      "issuer": "Backpack Securities",
+      "mint": "MNSTy46haEN7sEaeXAWBXG6zHaRikCvqf3krAEDzxr2",
+      "decimals": 6,
+      "redeemable": "share_redeemable"
     },
     {
       "symbol": "MRNA",
@@ -608,6 +600,14 @@
       "mint": "MRVLSjkR2ceUBukujaD3xCyHP1H3B2SzpsNTZF546jo",
       "decimals": 6,
       "redeemable": "share_redeemable"
+    },
+    {
+      "symbol": "MRVL",
+      "name": "Marvell",
+      "issuer": "Ondo",
+      "mint": "FovBwhoV5KQjZCdhoM6jgXYwXLX3F8vgAfvmLH7ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "MSFT",
@@ -728,6 +728,14 @@
       "mint": "NVDAVuiB7hwd3m5Wa1JuHNovPaPG6BH1QNztbKFxNjv",
       "decimals": 6,
       "redeemable": "share_redeemable"
+    },
+    {
+      "symbol": "NVO",
+      "name": "Novo Nordisk",
+      "issuer": "Ondo",
+      "mint": "GeV7S8vjP8qdYZpdGv2Xi6e7MUMCk8NAAp2z7g5ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "OPENAI",
@@ -882,6 +890,14 @@
       "redeemable": "share_redeemable"
     },
     {
+      "symbol": "SGOV",
+      "name": "iShares 0-3 Month Treasury Bond ETF",
+      "issuer": "Ondo",
+      "mint": "HjrN6ChZK2QRL6hMXayjGPLFvxhgjwKEy135VRjondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
       "symbol": "SHOP",
       "name": "Shopify",
       "issuer": "Backpack Securities",
@@ -940,14 +956,6 @@
     {
       "symbol": "SPCX",
       "name": "SpaceX",
-      "issuer": "Ondo",
-      "mint": "wzAyQTorWyoVXuJKj2x8EqKEGJpS13z6EWE9z5Aondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
-    },
-    {
-      "symbol": "SPCX",
-      "name": "SpaceX",
       "issuer": "PreStocks",
       "mint": "PreANxuXjsy2pvisWWMNB6YaJNzr7681wJJr2rHsfTh",
       "decimals": 9,
@@ -988,6 +996,14 @@
     {
       "symbol": "TSM",
       "name": "TSMC",
+      "issuer": "Backed (xStock)",
+      "mint": "XsafvsGtzFqqHgTnA3aPC83EAMkacU5mcGtcSayhpVV",
+      "decimals": 8,
+      "redeemable": "cash_redeemable"
+    },
+    {
+      "symbol": "TSM",
+      "name": "TSMC",
       "issuer": "Backpack Securities",
       "mint": "TSM2Hiuf7Z9REcwZFQvsBEekBYCYziWBABfFnj6V6gQ",
       "decimals": 6,
@@ -1010,19 +1026,11 @@
       "redeemable": "share_redeemable"
     },
     {
-      "symbol": "V",
-      "name": "Visa",
-      "issuer": "Ondo",
-      "mint": "kxEW4oJL75K37VeXaZF1ynbHQATQwhECQKN1374ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
-    },
-    {
-      "symbol": "VRT",
-      "name": "Vertiv",
-      "issuer": "Ondo",
-      "mint": "MkN2TZSYTFBdMRLf9EVcfhstTwnazH8knd9hpepondo",
-      "decimals": 9,
+      "symbol": "UNH",
+      "name": "UnitedHealth",
+      "issuer": "Backed (xStock)",
+      "mint": "XszvaiXGPwvk2nwb3o9C1CX4K6zH8sez11E6uyup6fe",
+      "decimals": 8,
       "redeemable": "cash_redeemable"
     },
     {
@@ -1032,14 +1040,6 @@
       "mint": "WENAZ2WyPbmgvUcKfQ8hyMDfBQP9bZ65hsZ5KTFrRGZ",
       "decimals": 6,
       "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "WMT",
-      "name": "Walmart",
-      "issuer": "Backed (xStock)",
-      "mint": "Xs151QeqTCiuKtinzfRATnUESM2xTU6V9Wy8Vy538ci",
-      "decimals": 8,
-      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "WULF",
