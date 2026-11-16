@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02",
+  "generatedAt": "2026-11-16",
   "tokens": [
     {
       "symbol": "AAPL",
@@ -18,30 +18,6 @@
       "redeemable": "share_redeemable"
     },
     {
-      "symbol": "ABNB",
-      "name": "Airbnb",
-      "issuer": "Backpack Securities",
-      "mint": "ABNB56TteaTZG1S3DY2W8VMncQmHMvNCGaZgAba49CLP",
-      "decimals": 6,
-      "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "ABNB",
-      "name": "Airbnb",
-      "issuer": "Ondo",
-      "mint": "128qNYovdGv2YqayErcJgU7gDwbNVX1VuoxbtWz8ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
-    },
-    {
-      "symbol": "AMBR",
-      "name": "Amber",
-      "issuer": "Backed (xStock)",
-      "mint": "XsaQTCgebC2KPbf27KUhdv5JFvHhQ4GDAPURwrEhAzb",
-      "decimals": 8,
-      "redeemable": "cash_redeemable"
-    },
-    {
       "symbol": "AMC",
       "name": "AMC Entertainment",
       "issuer": "Backpack Securities",
@@ -52,10 +28,26 @@
     {
       "symbol": "AMD",
       "name": "AMD",
+      "issuer": "Backed (xStock)",
+      "mint": "XsXcJ6GZ9kVnjqGsjBnktRcuwMBmvKWh8S93RefZ1rF",
+      "decimals": 8,
+      "redeemable": "cash_redeemable"
+    },
+    {
+      "symbol": "AMD",
+      "name": "AMD",
       "issuer": "Backpack Securities",
       "mint": "AMD8XwJXgQ9WV45Wyj9yFLejxzf2J6VM1PJY8bJEjeES",
       "decimals": 6,
       "redeemable": "share_redeemable"
+    },
+    {
+      "symbol": "AMD",
+      "name": "AMD",
+      "issuer": "Ondo",
+      "mint": "14diAn5z8kjrKwSC8WLqvBqqe5YmihJhjxRxd8Z6ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "AMZN",
@@ -72,14 +64,6 @@
       "mint": "AMZNw7cwU9L9c7ewZXxTws2PwQYxBGm2Rxg3FLDBJz9B",
       "decimals": 6,
       "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "AMZN",
-      "name": "Amazon",
-      "issuer": "Ondo",
-      "mint": "14Tqdo8V1FhzKsE3W2pFsZCzYPQxxupXRcqw9jv6ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "ANDURIL",
@@ -100,9 +84,9 @@
     {
       "symbol": "APP",
       "name": "AppLovin",
-      "issuer": "Ondo",
-      "mint": "14Z8rQQe2Aza33YgEUmj3g3QGNz8DXLiFPuCnsD1ondo",
-      "decimals": 9,
+      "issuer": "Backed (xStock)",
+      "mint": "XsPdAVBi8Zc1xvv53k4JcMrQaEDTgkGqKYeh7AYgPHV",
+      "decimals": 8,
       "redeemable": "cash_redeemable"
     },
     {
@@ -162,14 +146,6 @@
       "redeemable": "not_redeemable"
     },
     {
-      "symbol": "BABA",
-      "name": "Alibaba",
-      "issuer": "Ondo",
-      "mint": "1zvb9ELBFShBCWKEk5jRTJAaPAwtVt7quEXx1X4ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
-    },
-    {
       "symbol": "BE",
       "name": "Bloom Energy",
       "issuer": "Backpack Securities",
@@ -178,20 +154,20 @@
       "redeemable": "share_redeemable"
     },
     {
+      "symbol": "BIDU",
+      "name": "Baidu",
+      "issuer": "Ondo",
+      "mint": "54CoRF2FYMZNJg9tS36xq5BUcLZ7rju1r59jGc2ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
       "symbol": "BLK",
       "name": "BlackRock",
       "issuer": "Backpack Securities",
       "mint": "BLKKYfF41c6xRPrtX1rdYbxLE1xxEdZUnxQsB5hcZ8Nf",
       "decimals": 6,
       "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "BMNR",
-      "name": "Bitmine",
-      "issuer": "Ondo",
-      "mint": "MYXqkDYbzr7vjXAz2BapR4AiYRXzoikGirrLoRzondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "BRK.B",
@@ -214,14 +190,6 @@
       "name": "Cerebras Systems",
       "issuer": "Backpack Securities",
       "mint": "CBRSFBbQPpp77NpMcwbTN6fhBHmZM94oFLJvruytw4Fi",
-      "decimals": 6,
-      "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "CHWY",
-      "name": "Chewy",
-      "issuer": "Backpack Securities",
-      "mint": "CHWYHz2zfKajomqPV9it26n7vu7AgZZfqGHXCWtGWuJg",
       "decimals": 6,
       "redeemable": "share_redeemable"
     },
@@ -274,10 +242,10 @@
       "redeemable": "cash_redeemable"
     },
     {
-      "symbol": "CVX",
-      "name": "Chevron",
+      "symbol": "CRWD",
+      "name": "CrowdStrike",
       "issuer": "Ondo",
-      "mint": "7tgKziACteG26VjV5xKufojKxwTgCFyTwmWUmz5ondo",
+      "mint": "cdKfoNjbXgnSuxvoajhtH3uixfZhq1YXhQsS1Rwondo",
       "decimals": 9,
       "redeemable": "cash_redeemable"
     },
@@ -304,14 +272,6 @@
       "mint": "DRAMjSWR7HRfJKjRkvQWYL2bcaejaVhuxEcjf4pAY4Cw",
       "decimals": 6,
       "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "FIGUREAI",
-      "name": "Figure AI",
-      "issuer": "unknown",
-      "mint": "PreZad18qfPtbxNpMtMuAuX2zVpvkEU8DnJx56faCWd",
-      "decimals": 9,
-      "redeemable": "not_redeemable"
     },
     {
       "symbol": "FWDI",
@@ -402,14 +362,6 @@
       "redeemable": "share_redeemable"
     },
     {
-      "symbol": "HOOD",
-      "name": "Robinhood",
-      "issuer": "Ondo",
-      "mint": "BVdXGvmgi6A9oAiwWvBvP76fyTqcCNRJMM7zMN6ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
-    },
-    {
       "symbol": "IBM",
       "name": "IBM",
       "issuer": "Backpack Securities",
@@ -466,6 +418,14 @@
       "redeemable": "cash_redeemable"
     },
     {
+      "symbol": "JD",
+      "name": "JD.com",
+      "issuer": "Ondo",
+      "mint": "E1aUS5nyv7kaBzdQzPVJW5zfaMgoUJpKYzdnFS2ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
       "symbol": "JNJ",
       "name": "Johnson & Johnson",
       "issuer": "Backpack Securities",
@@ -478,14 +438,6 @@
       "name": "Johnson & Johnson",
       "issuer": "Ondo",
       "mint": "KUXt7LzHWSQXp5eyqMZRxWjAP6yM8BUh4LRHwiwondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
-    },
-    {
-      "symbol": "JPM",
-      "name": "JPMorgan Chase",
-      "issuer": "Ondo",
-      "mint": "E5Gczsavxcomqf6Cw1sGCKLabL1xYD2FzKxVoB4ondo",
       "decimals": 9,
       "redeemable": "cash_redeemable"
     },
@@ -538,20 +490,20 @@
       "redeemable": "cash_redeemable"
     },
     {
+      "symbol": "LRCX",
+      "name": "Lam Research",
+      "issuer": "Ondo",
+      "mint": "wFJoeEYpKg9oRhyJy6BWTT3J95gmXBLvoeikDQNondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
       "symbol": "LULU",
       "name": "Lululemon",
       "issuer": "Backpack Securities",
       "mint": "LULUmT9VMttkfAJE236LXJcYJ2tTP7nunrSWR5G1BdS",
       "decimals": 6,
       "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "MA",
-      "name": "Mastercard",
-      "issuer": "Ondo",
-      "mint": "EsVHcyRxXFJCLMiuYLWhoDygrNe1BJGpYeZ17X7ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "MCD",
@@ -586,12 +538,12 @@
       "redeemable": "cash_redeemable"
     },
     {
-      "symbol": "MP",
-      "name": "MP Materials",
-      "issuer": "Ondo",
-      "mint": "XwFm5GiKPVTvPiEbQpdc6vJbFEpsUXRMf6TcSxnondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
+      "symbol": "MNST",
+      "name": "Monster",
+      "issuer": "Backpack Securities",
+      "mint": "MNSTy46haEN7sEaeXAWBXG6zHaRikCvqf3krAEDzxr2",
+      "decimals": 6,
+      "redeemable": "share_redeemable"
     },
     {
       "symbol": "MRNA",
@@ -610,6 +562,14 @@
       "redeemable": "share_redeemable"
     },
     {
+      "symbol": "MRVL",
+      "name": "Marvell",
+      "issuer": "Ondo",
+      "mint": "FovBwhoV5KQjZCdhoM6jgXYwXLX3F8vgAfvmLH7ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
       "symbol": "MSFT",
       "name": "Microsoft",
       "issuer": "Backed (xStock)",
@@ -624,14 +584,6 @@
       "mint": "MSFThX899B1DddH5jkyMpdArWXzP85VXLYDrbGGcRJM",
       "decimals": 6,
       "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "MSFT",
-      "name": "Microsoft",
-      "issuer": "Ondo",
-      "mint": "FRmH6iRkMr33DLG6zVLR7EM4LojBFAuq6NtFzG6ondo",
-      "decimals": 9,
-      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "MSTR",
@@ -714,6 +666,14 @@
       "redeemable": "share_redeemable"
     },
     {
+      "symbol": "NOW",
+      "name": "ServiceNow",
+      "issuer": "Ondo",
+      "mint": "G7pTVoSECz5RQWubEnTP7AC83KHUsSyoiqYR1R2ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
       "symbol": "NVDA",
       "name": "NVIDIA",
       "issuer": "Backed (xStock)",
@@ -728,6 +688,14 @@
       "mint": "NVDAVuiB7hwd3m5Wa1JuHNovPaPG6BH1QNztbKFxNjv",
       "decimals": 6,
       "redeemable": "share_redeemable"
+    },
+    {
+      "symbol": "NVO",
+      "name": "Novo Nordisk",
+      "issuer": "Ondo",
+      "mint": "GeV7S8vjP8qdYZpdGv2Xi6e7MUMCk8NAAp2z7g5ondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "OPENAI",
@@ -1010,10 +978,10 @@
       "redeemable": "share_redeemable"
     },
     {
-      "symbol": "V",
-      "name": "Visa",
+      "symbol": "UBER",
+      "name": "Uber",
       "issuer": "Ondo",
-      "mint": "kxEW4oJL75K37VeXaZF1ynbHQATQwhECQKN1374ondo",
+      "mint": "KJNeFW3kk3ycPjXpC6cbuyckjeYHacc2ekhtAi5ondo",
       "decimals": 9,
       "redeemable": "cash_redeemable"
     },
@@ -1026,20 +994,28 @@
       "redeemable": "cash_redeemable"
     },
     {
+      "symbol": "VST",
+      "name": "Vistra",
+      "issuer": "Ondo",
+      "mint": "h6MW8GFpfzxFa1JNn6hZNnBF3t4fj9SHAXKy6LXondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
+      "symbol": "VTV",
+      "name": "Vanguard Value ETF",
+      "issuer": "Ondo",
+      "mint": "KuiYLPVq65qixD9TgvxBC576C4gG6vVTCdbh2zFondo",
+      "decimals": 9,
+      "redeemable": "cash_redeemable"
+    },
+    {
       "symbol": "WEN",
       "name": "Wendy's",
       "issuer": "Backpack Securities",
       "mint": "WENAZ2WyPbmgvUcKfQ8hyMDfBQP9bZ65hsZ5KTFrRGZ",
       "decimals": 6,
       "redeemable": "share_redeemable"
-    },
-    {
-      "symbol": "WMT",
-      "name": "Walmart",
-      "issuer": "Backed (xStock)",
-      "mint": "Xs151QeqTCiuKtinzfRATnUESM2xTU6V9Wy8Vy538ci",
-      "decimals": 8,
-      "redeemable": "cash_redeemable"
     },
     {
       "symbol": "WULF",
